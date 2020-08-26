@@ -1,7 +1,6 @@
 interface KANG {
   start: number;
   height: number;
-  jump(): number;
 }
 
 class Kangaroo {
@@ -9,57 +8,47 @@ class Kangaroo {
     this.start = start;
     this.height = height;
   }
-  jump(): number {
-    return this.start + this.height;
-  }
 }
+
+const EvenOROdd = (input: number): boolean => {
+  return input % 2 === 0;
+};
 
 const CompareKang = (input: number[]): boolean => {
   const kang1: KANG = new Kangaroo(input[0], input[1]);
   const kang2: KANG = new Kangaroo(input[2], input[3]);
+  const t1 = EvenOROdd(kang1.start + kang1.height);
+  const t2 = EvenOROdd(kang2.start + kang2.height);
 
-  const BigStart: number =
-    kang1.start > kang2.start ? kang1.start : kang2.start;
+  let jumpCount2: number;
+  let jumpCount1: number;
 
-  console.log('Hello to Jump kangaroo !');
-  console.log(
-    '[kangaroo 1] start poin :' +
-      kang1.start +
-      ' and jump height :' +
-      kang1.height
-  );
-  console.log(
-    '[kangaroo 2] start poin :' +
-      kang2.start +
-      ' and jump height :' +
-      kang2.height
-  );
-  console.log("let's start jumping...");
-  console.log('------------------------------------');
-  do {
-    if (kang1.start < kang2.start) {
-      kang1.start = kang1.jump();
-      console.log('[kangaroo 1] jumped...');
-      console.log('[kangaroo 1] start point change to : ' + kang1.start);
+  if (t1 === t2) {
+    if (kang1.start > kang2.start) {
+      for (let i = 0; !Number.isInteger(jumpCount2); i++) {
+        jumpCount2 =
+          (kang1.start - kang2.start + kang1.height * i) / kang2.height;
+        if (Number.isInteger(jumpCount2)) {
+          const Samepoint = kang2.start + kang2.height * jumpCount2;
+          console.log('YES and the same point is: ' + Samepoint);
+          return true;
+        }
+      }
     } else {
-      kang2.start = kang2.jump();
-      console.log('[kangaroo 2] jumped...');
-      console.log('[kangaroo 2] start point change to : ' + kang2.start);
+      for (let i = 0; !Number.isInteger(jumpCount1); i++) {
+        jumpCount1 =
+          (kang2.start - kang1.start + kang2.height * i) / kang1.height;
+        if (Number.isInteger(jumpCount1)) {
+          const Samepoint = kang1.start + kang1.height * jumpCount1;
+          console.log('YES and the same point is: ' + Samepoint);
+          return true;
+        }
+      }
     }
-
-    if (kang1.start === kang2.start) {
-      console.log('YES and same Point is : ' + kang1.start);
-      return true;
-    } else {
-      console.log('[kangaroo 1] current Point : ' + kang1.start);
-      console.log('[kangaroo 2] current Point : ' + kang2.start);
-      console.log('Not yet! Again...');
-      console.log('-----------------------------------------------------');
-    }
-  } while (kang1.start < Math.pow(BigStart, 2));
-
-  console.log('NO!');
-  return false;
+  } else {
+    console.log('NO');
+    return false;
+  }
 };
 
-CompareKang([0, 80, 500, 2]);
+CompareKang([0, 2, 5, 2]);
